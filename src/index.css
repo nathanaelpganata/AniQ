@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .na {
+        @apply text-md text-red-600;
+    },
+    .infoGeneralTitle {
+        @apply text-xl font-semibold flex flex-wrap items-center mt-2;
+    },
+    .infoGeneralComponent {
+        @apply bg-liteGrey px-2 py-0.5 rounded-lg font-normal text-lg;
+    }
+}
