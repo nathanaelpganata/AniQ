@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/AniQ/static/css/main.ba6e2477.css",
+    "main.js": "/AniQ/static/js/main.6b4836b3.js",
+    "index.html": "/AniQ/index.html",
+    "main.ba6e2477.css.map": "/AniQ/static/css/main.ba6e2477.css.map",
+    "main.6b4836b3.js.map": "/AniQ/static/js/main.6b4836b3.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.ba6e2477.css",
+    "static/js/main.6b4836b3.js"
+  ]
+}
