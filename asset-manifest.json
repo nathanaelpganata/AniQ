@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/AniQ/static/css/main.ba6e2477.css",
-    "main.js": "/AniQ/static/js/main.6b4836b3.js",
+    "main.css": "/AniQ/static/css/main.10c35e5c.css",
+    "main.js": "/AniQ/static/js/main.e3b6c0fd.js",
     "index.html": "/AniQ/index.html",
-    "main.ba6e2477.css.map": "/AniQ/static/css/main.ba6e2477.css.map",
-    "main.6b4836b3.js.map": "/AniQ/static/js/main.6b4836b3.js.map"
+    "main.10c35e5c.css.map": "/AniQ/static/css/main.10c35e5c.css.map",
+    "main.e3b6c0fd.js.map": "/AniQ/static/js/main.e3b6c0fd.js.map"
   },
   "entrypoints": [
-    "static/css/main.ba6e2477.css",
-    "static/js/main.6b4836b3.js"
+    "static/css/main.10c35e5c.css",
+    "static/js/main.e3b6c0fd.js"
   ]
 }
