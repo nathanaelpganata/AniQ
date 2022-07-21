@@ -356,7 +356,7 @@ export const AnimeInfo = ({goBack, animeID}) => {
                         }
 
                         {/* Themes */}
-                        { fetchingThemes ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingRecs} size={30}/></div>:
+                        { fetchingThemes ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingThemes} size={30}/></div>:
                         <motion.div 
                         initial={{y:-20}}
                         animate={{y:20}}
