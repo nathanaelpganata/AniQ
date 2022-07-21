@@ -12,11 +12,12 @@ import { GoPrimitiveDot } from "react-icons/go";
 import { MdOutlineExpandMore, MdExpandLess } from "react-icons/md";
 import { Chart as ChartJS, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title} from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-
+import { motion } from 'framer-motion';
 
 export const AnimeInfo = ({goBack, animeID}) => {
 
     const [tabs, setTabs] = useState(1)
+    const [selectedTabs, seSelectedTabs] = useState(1)
     const [moreChara, setMoreChara] = useState(false)
     const [moreStaffs, setMoreStaffs] = useState(false)
     const [moreRecs, setMoreRecs] = useState(false)
@@ -193,17 +194,29 @@ export const AnimeInfo = ({goBack, animeID}) => {
                         </div>
 
                         {/* Tabs Selection */}
-                        <div className='flex flex-row text-white text-lg my-10 w-[570px] h-14 justify-center items-center bg-grey font-poppins cursor-pointer'>
-                            <h1 className={tabs === 1 ? 'block bg-liteGrey w-max h-max px-4 py-2 font-bold':'bg-grey w-max h-max px-4 py-2 font-bold hover:opacity-80'} onClick={() => setTabs(1)}>Info</h1>
-                            <h1 className={tabs === 2 ? 'block bg-liteGrey w-max h-max px-4 py-2 font-bold':'bg-grey w-max h-max px-4 py-2 font-bold hover:opacity-80'} onClick={() => {setTabs(2); refetchChara(); refetchStaffs()}}>Characters & Staffs</h1>
-                            <h1 className={tabs === 3 ? 'block bg-liteGrey w-max h-max px-4 py-2 font-bold':'bg-grey w-max h-max px-4 py-2 font-bold hover:opacity-80'} onClick={() => {setTabs(3); refetchRecs()}}>Reccomendations</h1>
-                            <h1 className={tabs === 4 ? 'block bg-liteGrey w-max h-max px-4 py-2 font-bold':'bg-grey w-max h-max px-4 py-2 font-bold hover:opacity-80'} onClick={() => setTabs(4)}>Trailer</h1>
-                        </div>
+                        <motion.div 
+                        animate={{}}
+                        className='flex flex-row text-white text-lg my-10 w-[570px] h-14 justify-center items-center bg-grey font-poppins cursor-pointer'>
+                            <motion.div
+                            className={tabs===1 ? "bg-liteGrey w-14 h-9 absolute z-20 mr-[495px]" : tabs === 2 ? "bg-liteGrey w-48 h-9 absolute z-20 mr-[495px]" : tabs === 3 ? "bg-liteGrey w-48 h-9 absolute z-20 mr-[495px]" : "bg-liteGrey w-20 h-9 absolute z-20 mr-[495px]"}
+                            initial={{x:0}}
+                            animate={{x: tabs === 1 ? 0: tabs === 2 ? 137 : tabs === 3 ? 339: 480 }}
+                            
+                            ></motion.div>
+                            <h1 className={tabs === 1 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => setTabs(1)}>Info</h1>
+                            <h1 className={tabs === 2 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(2); refetchChara(); refetchStaffs()}}>Characters & Staffs</h1>
+                            <h1 className={tabs === 3 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(3); refetchRecs()}}>Reccomendations</h1>
+                            <h1 className={tabs === 4 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => setTabs(4)}>Trailer</h1>
+                        </motion.div>
 
                         {/* Info */}
-                        <div className={tabs === 1 ? 'flex flex-row text-white font-poppins mb-32 gap-4 justify-center' : 'hidden'}>
+                        <motion.div
+                        on
+                        initial={{y:-20}}
+                        animate={{y:20}}
+                        className={tabs === 1 ? 'flex flex-row text-white font-poppins mb-32 gap-4 justify-center' : 'hidden'}>
                             <div className='flex flex-col'>
-                                <div className=" text-white bg-grey px-5 py-4 rounded-2xl w-max-[700px] h-min text-start">
+                                <div className=" text-white bg-grey px-5 py-4 rounded-2xl min-w-[300px] h-min text-start">
                                     <h1  className='text-3xl font-bold'>General</h1>
                                     <h1 className='text-xl font-semibold flex flex-wrap mt-6 items-center'>Title:&nbsp; {anime.data.title ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{anime.data.title}</h1> : <h1 className='text-md font-normal'>N/A</h1>}</h1>
                                     <h1 className='text-xl font-semibold flex flex-wrap items-center mt-2'>Japanese Title:&nbsp; {anime.data.title_japanese ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{anime.data.title_japanese}</h1> : <h1 className='text-md font-normal'>N/A</h1>}</h1>
@@ -242,10 +255,11 @@ export const AnimeInfo = ({goBack, animeID}) => {
                             </div>
 
                             <div className='flex flex-col gap-6'>
-                                {relations?.data?.length >= 1 ? 
-                                <div className='flex flex-col text-white bg-grey px-5 py-4 rounded-2xl h-min w-max-[800px]'>
+                                {
+                                relations?.data?.length >= 1 ? 
+                                <div className='flex flex-col text-white bg-grey px-5 py-4 rounded-2xl h-min'>
                                     <h1 className='text-3xl font-bold'>Relations</h1>
-                                    <h1 className='mt-1 flex flex-wrap'>{relations?.data?.length >= 1 ? <h1 className='mt-3'>{relations?.data?.map(rels => (<div><h1 className='text-2xl font-bold'>{rels.relation}</h1><p className='ml-4'>{rels?.entry?.map(entries => <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg my-2 flex flex-wrap w-max py-1'>{entries?.name} ({entries?.type})</h1>)}</p></div>))}</h1> : <h1>N/A</h1>}</h1>
+                                    <h1 className='mt-1'>{relations?.data?.length >= 1 ? <h1 className='mt-3'>{relations?.data?.map(rels => (<div><h1 className='text-2xl font-bold'>{rels.relation}</h1><p className='ml-4'>{rels?.entry?.map(entries => <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg my-2 flex flex-wrap py-1 w-fit'>{entries?.name} ({entries?.type})</h1>)}</p></div>))}</h1> : <h1>N/A</h1>}</h1>
                                 </div>
                                 :<></>
                                 }
@@ -258,17 +272,20 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                     <h1 className='flex flex-inline font-semibold items-center text-xl'>Plan To Watch:&nbsp; {chartData?.data?.plan_to_watch ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.plan_to_watch}</h1> : <h1>N/A</h1>}</h1>
                                     <h1 className='flex flex-inline font-semibold items-center text-xl'>Total:&nbsp; {chartData.data?.total ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.total}</h1> : <h1>N/A</h1>}</h1>
                                     <h1 className='flex justify-center font-semibold items-center text-2xl mt-8 mb-4 flex-wrap'>{anime.data?.title} Score [{anime.data?.score}] of {anime.data?.scored_by} Votes</h1>
-                                    <Bar data={barData} options={options} className="min-w-[600px]" />
+                                    <Bar data={barData} options={options} className="min-w-[400px]" />
                                 </div>
                             </div>
 
 
 
-                        </div>
+                        </motion.div>
 
                         {/* Characters & Staffs */}
                         { fetchingChara || fetchingStaff ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingChara || fetchingStaff} size={30}/></div>:
-                        <div className={tabs === 2 ? 'block' : 'hidden'}>
+                        <motion.div
+                        initial={{y:-20}}
+                        animate={{y:20}}
+                        className={tabs === 2 ? 'block' : 'hidden'}>
                             <div className='text-white flex flex-col mx-auto bg-grey px-5 py-4 rounded-lg col-span-3 font-poppins'>
                                 <div className='flex flex-row'>
                                 <h1 className='text-2xl font-bold'>Characters</h1>
@@ -327,12 +344,15 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                 }
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                         }
 
                         {/* Reccomendations */}
                         { fetchingRecs ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingRecs} size={30}/></div>:
-                        <div className={tabs === 3 ? 'block' : 'hidden'}>
+                        <motion.div 
+                        initial={{y:-20}}
+                        animate={{y:20}}
+                        className={tabs === 3 ? 'block' : 'hidden'}>
                             <div className='text-white flex flex-col mx-auto bg-grey px-5 py-4 rounded-lg col-span-3 w-full mb-52'>
                                 <h1 className='text-2xl font-bold text-white  w-max'>Recommendations</h1>
                                 <div className='grid grid-cols-3 gap-2 mt-8'>
@@ -356,14 +376,17 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                 }
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                         }
 
                         {/* Trailer */}
-                        <div className={tabs === 4 ? 'flex mb-32 flex-col' : 'hidden'}>
+                        <motion.div 
+                        initial={{y:-20}}
+                        animate={{y:20}}
+                        className={tabs === 4 ? 'flex mb-32 flex-col' : 'hidden'}>
                             <h1 className='text-2xl mx-auto font-bold mt-2 bg-liteGrey px-3 py-1 rounded-lg w-max'>{anime.data.title}&nbsp;Trailer</h1>
                             <YouTube videoId={anime.data?.trailer.youtube_id} opts={opts} className="mr-4 mt-10 flex justify-center" />
-                        </div>
+                        </motion.div>
     
                     </div>
                 </div>
