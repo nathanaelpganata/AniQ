@@ -30,6 +30,7 @@ export const AnimeInfo = ({goBack, animeID}) => {
     const fetcherRecommendations = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/recommendations`).then(res => res.json())
     const fetcherRelations = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/relations`).then(res => res.json())
     const fetcherStatistics = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/statistics`).then(res => res.json()).then(res => setChartData(res))
+    const fetcherThemes = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/themes`).then(res => res.json())
     
     const {data: anime, isLoading, isFetching} = useQuery("animeByID", fetcherAnimeByID, {
         refetchOnWindowFocus: false
@@ -53,6 +54,12 @@ export const AnimeInfo = ({goBack, animeID}) => {
         staleTime: Infinity
     })
     
+    const {data: themes, refetch: refetchThemes, isFetching: fetchingThemes, error: errorThemes} = useQuery("themes", fetcherThemes, {
+        enabled: false,
+        cacheTime: Infinity,
+        staleTime: Infinity
+    })
+
     const {data: relations} = useQuery("relations", fetcherRelations, {
         refetchOnWindowFocus: false
     })
@@ -141,8 +148,8 @@ export const AnimeInfo = ({goBack, animeID}) => {
 
 
   return (
-    <div className=' '>
-        { anime || chara || staff || recommendations || relations || statistics ? (
+    <div>
+        { anime || chara || staff || recommendations || relations || statistics || themes ? (
             <div>
                 <img src={anime.data.images.jpg.large_image_url} alt={anime.data.title} className="object-cover max-h-[600px] w-full blur-sm items-center absolute -z-30 -mt-3 scale-100 brightness-75 backdrop-contrast-0 border-x-[3px] border-black backdrop-blur-none backdrop-grayscale-0 backdrop-hue-rotate-0 backdrop-opacity-100 backdrop-saturate-100 backdrop-filter" />
                 <div className='mx-52'>
@@ -159,12 +166,12 @@ export const AnimeInfo = ({goBack, animeID}) => {
                             <h1 className='text-7xl font-extrabold flex flex-wrap'>{anime.data.title ? <h1>{anime.data.title}</h1> : <h1>N/A</h1>}</h1>
                             <h1 className='text-3xl mt-3 font-bold flex flex-wrap'>{anime.data.title_japanese ? <h1>{anime.data.title_japanese}</h1> : <h1>N/A</h1>}</h1>
                             <div className='flex flex-1'></div>
-                                <h1 className='font-semibold flex flex-inline text-2xl font-poppins select-none'>{anime.data.studios.length >= 1 ? <h1>{anime.data.studios.slice(0,1).map(produce => (<span>{produce.name} </span>))}</h1> : <h1>N/A</h1>}</h1>
+                                <h1 className='font-semibold flex  text-2xl font-poppins select-none'>{anime.data.studios.length >= 1 ? <h1>{anime.data.studios.slice(0,1).map(produce => (<span>{produce.name} </span>))}</h1> : <h1>N/A</h1>}</h1>
                             <div className='flex flex-row gap-2'>
-                                <h1 className='text-2xl mt-2 font-semibold flex flex-inline w-max h-min bg-liteOrange px-2 shadow-md shadow-orange-800 py-2 rounded-md items-center'>Ranked #{anime.data.rank ? <h1>{anime.data.rank}</h1> : <h1>N/a</h1>}</h1>
-                                <h1 className='text-2xl mt-2 font-semibold flex flex-inline w-max h-min bg-liteOrange px-2 shadow-md shadow-orange-800 py-2 rounded-md items-center'>Popularity #{anime.data.popularity ? <h1>{anime.data.popularity}</h1> : <h1>N/a</h1>}</h1>
+                                <h1 className='text-2xl mt-2 font-semibold flex  w-max h-min bg-liteOrange px-2 shadow-md shadow-orange-800 py-2 rounded-md items-center'>Ranked #{anime.data.rank ? <h1>{anime.data.rank}</h1> : <h1>N/a</h1>}</h1>
+                                <h1 className='text-2xl mt-2 font-semibold flex  w-max h-min bg-liteOrange px-2 shadow-md shadow-orange-800 py-2 rounded-md items-center'>Popularity #{anime.data.popularity ? <h1>{anime.data.popularity}</h1> : <h1>N/a</h1>}</h1>
                                 <div className='flex flex-row w-min h-min bg-liteOrange px-2 shadow-md shadow-orange-800 py-2 rounded-lg mt-2'>
-                                    <h1 className='text-2xl font-semibold flex flex-inline items-center'><AiOutlineStar className='scale-150 mr-2'/>{anime.data.score ? <h1>{anime.data.score}</h1> : <h1>N/A</h1>}</h1>
+                                    <h1 className='text-2xl font-semibold flex  items-center'><AiOutlineStar className='scale-150 mr-2'/>{anime.data.score ? <h1>{anime.data.score}</h1> : <h1>N/A</h1>}</h1>
                                     <div className='h-8 w-[3px] bg-white ml-1.5'></div>
                                     <div className='flex flex-col ml-1.5 w-max flex-wrap  justify-start'>
                                         <h1 className='text-xs font-semibold'>by&nbsp;{anime.data.scored_by ? <h1>{anime.data.scored_by} users</h1> : <h1></h1>}</h1>
@@ -180,12 +187,12 @@ export const AnimeInfo = ({goBack, animeID}) => {
                     <div className='mx-52 mt-[77px] select-none'>
                         <div className='flex flex-row gap-2 items-center font-poppins text-sm'>
                             <div className='w-[234px]'></div>
-                            <h1 className={anime.data.season == "spring" ? "flex flex-inline items-center bg-[#dcfe0091] rounded-lg px-3 py-1": anime.data.season == "fall" ? "flex flex-inline items-center bg-amber-700 rounded-lg px-3 py-1": anime.data.season == "summer" ? "flex flex-inline items-center bg-orange-400 rounded-lg px-3 py-1" : "flex flex-inline items-center bg-blue-400 rounded-lg px-3 py-1" }>{anime.data.season == "spring" ? <SiSpring className='mr-1'/> : <h1></h1>}{anime.data.season == "fall" ? <GiFallingLeaf className='mr-1'/> : <h1></h1>}{anime.data.season == "summer" ? <FaSun className='mr-1'/> : <h1></h1>}{anime.data.season == "winter" ? <BsSnow2 className='mr-1'/> : <h1></h1>}{anime.data.season ? <h1 className='capitalize'>{anime.data.season}</h1> : <h1></h1>}&nbsp;{anime.data.year ? <h1>{anime.data.year}</h1> : <h1>N/A</h1>}</h1>
-                            <h1 className='flex flex-inline w-max  bg-grey rounded-lg px-3 py-1'>{anime.data?.rating ? <h1 className={anime.data?.rating.includes("Hentai") ? "text-red-600 font-semibold" : ""}>{anime.data?.rating}</h1> : <h1>N/A</h1>}</h1>
-                            <h1 className='flex flex-inline w-max  bg-grey rounded-lg px-3 py-1'>Type:&nbsp; {anime.data.type ? <h1>{anime.data.type}</h1> : <h1>N/A</h1>}</h1> 
-                            <h1 className='flex flex-inline w-max  bg-grey rounded-lg px-3 py-1'>Eps:&nbsp; {anime.data.episodes ? <h1>{anime.data.episodes}</h1> : <h1>N/A</h1>}</h1> 
-                            {anime.data?.genres.length > 0 ? anime.data?.genres.slice(0,3).map(genre => (<span className=' bg-grey rounded-lg px-3 py-1 flex flex-inline'>{genre.name}</span>)) : <h1></h1>}
-                            <h1 className='flex flex-inline items-center'><GoPrimitiveDot className={anime.data.status == "Finished Airing" ? 'scale-125 mr-1 text-blue-500': anime.data.status == "Currently Airing" ? 'scale-125 mr-1 text-green-500' : 'scale-125 mr-1 text-yellow-500'}/>{anime.data.status ? <h1>{anime.data.status}</h1> : <h1>N/A</h1>}</h1>
+                            <h1 className={anime.data.season == "spring" ? "flex  items-center bg-[#dcfe0091] rounded-lg px-3 py-1": anime.data.season == "fall" ? "flex  items-center bg-amber-700 rounded-lg px-3 py-1": anime.data.season == "summer" ? "flex  items-center bg-orange-400 rounded-lg px-3 py-1" : "flex  items-center bg-blue-400 rounded-lg px-3 py-1" }>{anime.data.season == "spring" ? <SiSpring className='mr-1'/> : <h1></h1>}{anime.data.season == "fall" ? <GiFallingLeaf className='mr-1'/> : <h1></h1>}{anime.data.season == "summer" ? <FaSun className='mr-1'/> : <h1></h1>}{anime.data.season == "winter" ? <BsSnow2 className='mr-1'/> : <h1></h1>}{anime.data.season ? <h1 className='capitalize'>{anime.data.season}</h1> : <h1></h1>}&nbsp;{anime.data.year ? <h1>{anime.data.year}</h1> : <h1>N/A</h1>}</h1>
+                            <h1 className='flex  w-max  bg-grey rounded-lg px-3 py-1'>{anime.data?.rating ? <h1 className={anime.data?.rating.includes("Hentai") ? "text-red-600 font-semibold" : ""}>{anime.data?.rating}</h1> : <h1>N/A</h1>}</h1>
+                            <h1 className='flex  w-max  bg-grey rounded-lg px-3 py-1'>Type:&nbsp; {anime.data.type ? <h1>{anime.data.type}</h1> : <h1>N/A</h1>}</h1> 
+                            <h1 className='flex  w-max  bg-grey rounded-lg px-3 py-1'>Eps:&nbsp; {anime.data.episodes ? <h1>{anime.data.episodes}</h1> : <h1>N/A</h1>}</h1> 
+                            {anime.data?.genres.length > 0 ? anime.data?.genres.slice(0,3).map(genre => (<span className=' bg-grey rounded-lg px-3 py-1 flex '>{genre.name}</span>)) : <h1></h1>}
+                            <h1 className='flex  items-center'><GoPrimitiveDot className={anime.data.status == "Finished Airing" ? 'scale-125 mr-1 text-blue-500': anime.data.status == "Currently Airing" ? 'scale-125 mr-1 text-green-500' : 'scale-125 mr-1 text-yellow-500'}/>{anime.data.status ? <h1>{anime.data.status}</h1> : <h1>N/A</h1>}</h1>
                         </div>
 
                         {/* Synopsis */}
@@ -196,17 +203,18 @@ export const AnimeInfo = ({goBack, animeID}) => {
                         {/* Tabs Selection */}
                         <motion.div 
                         animate={{}}
-                        className='flex flex-row text-white text-lg my-10 w-[570px] h-14 justify-center items-center bg-grey font-poppins cursor-pointer'>
+                        className='flex flex-row text-white text-lg my-10 w-[680px] h-14 justify-center items-center bg-grey font-poppins cursor-pointer'>
                             <motion.div
-                            className={tabs===1 ? "bg-liteGrey w-14 h-9 absolute z-20 mr-[495px]" : tabs === 2 ? "bg-liteGrey w-48 h-9 absolute z-20 mr-[495px]" : tabs === 3 ? "bg-liteGrey w-48 h-9 absolute z-20 mr-[495px]" : "bg-liteGrey w-20 h-9 absolute z-20 mr-[495px]"}
+                            className={tabs===1 ? "bg-liteGrey w-14 h-9 absolute z-20 mr-[495px]" : tabs === 2 ? "bg-liteGrey w-48 h-9 absolute z-20 mr-[495px]" : tabs === 3 ? "bg-liteGrey w-24 h-9 absolute z-20 mr-[495px]" : tabs === 4 ? "bg-liteGrey w-48 h-9 absolute z-20 mr-[495px]" : "bg-liteGrey w-20 h-9 absolute z-20 mr-[495px]"}
                             initial={{x:0}}
-                            animate={{x: tabs === 1 ? 0: tabs === 2 ? 137 : tabs === 3 ? 339: 480 }}
+                            animate={{x: tabs === 1 ? -51: tabs === 2 ? 86 : tabs === 3 ? 241: tabs === 4 ? 390 : 533 }}
                             
                             ></motion.div>
                             <h1 className={tabs === 1 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => setTabs(1)}>Info</h1>
                             <h1 className={tabs === 2 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(2); refetchChara(); refetchStaffs()}}>Characters & Staffs</h1>
-                            <h1 className={tabs === 3 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(3); refetchRecs()}}>Reccomendations</h1>
-                            <h1 className={tabs === 4 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => setTabs(4)}>Trailer</h1>
+                            <h1 className={tabs === 3 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(3); refetchThemes()}}>Themes</h1>
+                            <h1 className={tabs === 4 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(4); refetchRecs()}}>Reccomendations</h1>
+                            <h1 className={tabs === 5 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => setTabs(5)}>Trailer</h1>
                         </motion.div>
 
                         {/* Info */}
@@ -216,7 +224,7 @@ export const AnimeInfo = ({goBack, animeID}) => {
                         animate={{y:20}}
                         className={tabs === 1 ? 'flex flex-row text-white font-poppins mb-32 gap-4 justify-center' : 'hidden'}>
                             <div className='flex flex-col'>
-                                <div className=" text-white bg-grey px-5 py-4 rounded-2xl min-w-[300px] h-min text-start">
+                                <div className=" text-white bg-grey px-5 py-4 rounded-2xl min-w-[400px] h-min text-start">
                                     <h1  className='text-3xl font-bold'>General</h1>
                                     <h1 className='text-xl font-semibold flex flex-wrap mt-6 items-center'>Title:&nbsp; {anime.data.title ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{anime.data.title}</h1> : <h1 className='text-md font-normal'>N/A</h1>}</h1>
                                     <h1 className='text-xl font-semibold flex flex-wrap items-center mt-2'>Japanese Title:&nbsp; {anime.data.title_japanese ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{anime.data.title_japanese}</h1> : <h1 className='text-md font-normal'>N/A</h1>}</h1>
@@ -264,15 +272,15 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                 :<></>
                                 }
                                 <div className='flex flex-col text-white bg-grey px-5 py-4 rounded-2xl h-min gap-1'>
-                                    <h1 className='text-3xl font-bold'>Statistics</h1>
-                                    <h1 className='mt-4 flex flex-inline font-semibold items-center text-xl'>Watching:&nbsp; {chartData.data?.watching ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.watching}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex flex-inline font-semibold items-center text-xl'>Completed:&nbsp; {chartData.data?.completed ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.completed}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex flex-inline font-semibold items-center text-xl'>On Hold:&nbsp; {chartData.data?.on_hold ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.on_hold}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex flex-inline font-semibold items-center text-xl'>Dropped:&nbsp; {chartData.data?.dropped ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.dropped}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex flex-inline font-semibold items-center text-xl'>Plan To Watch:&nbsp; {chartData?.data?.plan_to_watch ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.plan_to_watch}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex flex-inline font-semibold items-center text-xl'>Total:&nbsp; {chartData.data?.total ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.total}</h1> : <h1>N/A</h1>}</h1>
+                                    <h1 className='text-3xl font-bold'>Statistics</h1> 
+                                    <h1 className='mt-4 flex  font-semibold items-center text-xl'>Watching:&nbsp; {chartData.data?.watching ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.watching}</h1> : <h1>N/A</h1>}</h1>
+                                    <h1 className='flex  font-semibold items-center text-xl'>Completed:&nbsp; {chartData.data?.completed ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.completed}</h1> : <h1>N/A</h1>}</h1>
+                                    <h1 className='flex  font-semibold items-center text-xl'>On Hold:&nbsp; {chartData.data?.on_hold ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.on_hold}</h1> : <h1>N/A</h1>}</h1>
+                                    <h1 className='flex  font-semibold items-center text-xl'>Dropped:&nbsp; {chartData.data?.dropped ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.dropped}</h1> : <h1>N/A</h1>}</h1>
+                                    <h1 className='flex  font-semibold items-center text-xl'>Plan To Watch:&nbsp; {chartData?.data?.plan_to_watch ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.plan_to_watch}</h1> : <h1>N/A</h1>}</h1>
+                                    <h1 className='flex  font-semibold items-center text-xl'>Total:&nbsp; {chartData.data?.total ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.total}</h1> : <h1>N/A</h1>}</h1>
                                     <h1 className='flex justify-center font-semibold items-center text-2xl mt-8 mb-4 flex-wrap'>{anime.data?.title} Score [{anime.data?.score}] of {anime.data?.scored_by} Votes</h1>
-                                    <Bar data={barData} options={options} className="min-w-[400px]" />
+                                    <Bar data={barData} options={options} className="min-w-[600px]" />
                                 </div>
                             </div>
 
@@ -347,12 +355,43 @@ export const AnimeInfo = ({goBack, animeID}) => {
                         </motion.div>
                         }
 
+                        {/* Themes */}
+                        { fetchingThemes ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingRecs} size={30}/></div>:
+                        <motion.div 
+                        initial={{y:-20}}
+                        animate={{y:20}}
+                        className={tabs === 3 ? 'block' : 'hidden'}>
+                            <div className='text-white flex flex-col mx-auto bg-grey px-5 py-4 rounded-lg col-span-3 w-full mb-52'>
+                                <h1 className='text-2xl font-bold text-white  w-max'>Themes</h1>
+                                <div className='grid grid-cols-2 bg-opacity-50 h-full rounded-lg p-4 gap-20'>
+                                    <div className='bg-liteGrey px-6 py-3 rounded-lg'>
+                                        <h1 className='text-2xl font-bold mb-4 mt-2'>Openings</h1>
+                                        {themes?.data?.openings?.map(song => {
+                                            return <div>
+                                                <h1 className='text-xl flex flex-wrap'>{song}</h1>
+                                            </div>
+                                        } )}
+                                    </div>
+                                    <div className='bg-liteGrey px-6 py-3 rounded-lg'>
+                                        <h1 className='text-2xl font-bold mb-4 mt-2'>Endings</h1>
+                                        {themes?.data?.endings?.map(song => {
+                                            return <div>
+                                                <h1 className='text-xl flex flex-wrap'>{song}</h1>
+                                            </div>
+                                        } )}
+                                    </div>
+                                </div>
+                            </div>
+                        </motion.div>
+                        }
+
+                    
                         {/* Reccomendations */}
                         { fetchingRecs ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingRecs} size={30}/></div>:
                         <motion.div 
                         initial={{y:-20}}
                         animate={{y:20}}
-                        className={tabs === 3 ? 'block' : 'hidden'}>
+                        className={tabs === 4 ? 'block' : 'hidden'}>
                             <div className='text-white flex flex-col mx-auto bg-grey px-5 py-4 rounded-lg col-span-3 w-full mb-52'>
                                 <h1 className='text-2xl font-bold text-white  w-max'>Recommendations</h1>
                                 <div className='grid grid-cols-3 gap-2 mt-8'>
@@ -383,7 +422,7 @@ export const AnimeInfo = ({goBack, animeID}) => {
                         <motion.div 
                         initial={{y:-20}}
                         animate={{y:20}}
-                        className={tabs === 4 ? 'flex mb-32 flex-col' : 'hidden'}>
+                        className={tabs === 5 ? 'flex mb-32 flex-col' : 'hidden'}>
                             <h1 className='text-2xl mx-auto font-bold mt-2 bg-liteGrey px-3 py-1 rounded-lg w-max'>{anime.data.title}&nbsp;Trailer</h1>
                             <YouTube videoId={anime.data?.trailer.youtube_id} opts={opts} className="mr-4 mt-10 flex justify-center" />
                         </motion.div>
