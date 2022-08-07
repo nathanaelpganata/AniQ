@@ -38,7 +38,8 @@ function App() {
   })
 
   const {data: animes, error, isLoading, refetch, isFetching} = useQuery("jikanAPI", () => fetcher(title), {
-
+    refetchOnWindowFocus: false,
+    staleTime: 100000
     
   })
 
@@ -55,7 +56,7 @@ function App() {
   }
 
   return (
-    <div className="App bg-liteBlack h-max">
+    <div className="App bg-liteBlack min-h-screen font-poppins">
       <div className='flex flex-col'>
         <h1 onClick={() => {fetchHome();setIsHome(true)}} className="cursor-pointer">
         <motion.h1
@@ -75,11 +76,11 @@ function App() {
             onClick={() => {refetch(); setIsHome(false)}} className=" absolute md:ml-80 sm:ml-44 ml-24 border-2 rounded-3xl px-4 py-2 border-liteOrange bg-liteOrange hover:bg-orange-700 transition duration-200 text-xl" type='submit'>Go</motion.button>
             <button className='text-red-800 border-2 border-red-800 px-2 sm:w-[63px]  md:ml-5 sm:ml-6 ml-4 flex flex-inline rounded-lg hover:scale-95 duration-300 transition font-semibold sm:text-base text-sm' onClick={() => setSfw(!sfw)}>{sfw === true ? <h1>~SFW</h1> : <h1>NSFW</h1>}</button>
           </form>
-          <RingLoader color={"#ff6740"} loading={isLoading || isFetching } size={200} className="flex mx-auto mt-56" />
+            <RingLoader color={"#ff6740"} loading={isLoading || isFetching } size={200} className="flex mx-auto mt-56 bg-liteBlack h-screen" />
       </div>
       <div className='grid 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 grid-cols-2 2xl:mx-72 xl:mx-40 lg:mx-40 md:mx-36 sm:mx-24 mx-10 gap-4 pt-10'>
         {
-          isLoading || isFetching || animes.data.length < 1 ? <h1 className='text-red-700 flex justify-center text-4xl pt-72 col-span-4'>Not Found</h1>
+          isLoading || isFetching ? <h1></h1>
           : isHome === true ? airHome?.data?.map((animeAir) => {
             return(
             <div className='grid font-poppins hover:scale-110 transition duration-200 hover:z-10 mb-4 text-white'>
@@ -104,9 +105,10 @@ function App() {
             )
           })
         }
-
       </div>
-      <footer className='mt-[1080px] text-white text-lg'>
+
+      {animes?.data?.length < 1 && isLoading === false && isFetching === false ? <h1 className='text-red-700 flex justify-center text-4xl pt-72 col-span-4 font-semibold'>Not Found</h1> : <h1></h1>}
+      <footer className='mt-[1024px] text-white text-lg'>
         Powered by JIKAN API
       </footer>
     </div>

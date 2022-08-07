@@ -14,11 +14,11 @@ const CharaStaff = ({animeID, tabs}) => {
     const fetcherStaffByID = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/staff`).then(res => res.json())
 
     const {data: chara, refetch: refetchChara, isFetching: fetchingChara, error: errorChara} = useQuery("characterByID", fetcherCharacterByID, {
-
+        cacheTime: 0,
     })
     
     const {data: staff, refetch: refetchStaffs, isFetching: fetchingStaff, error: errorStaff} = useQuery("staffByID", fetcherStaffByID, {
-
+        cacheTime: 0,
     })
 
 
@@ -34,12 +34,10 @@ const CharaStaff = ({animeID, tabs}) => {
     }
 
     return (<div>
-        {/* Characters & Staffs */}
-        { fetchingChara || fetchingStaff ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingChara || fetchingStaff} size={30}/></div>:
+        { fetchingChara || fetchingStaff ? <div className='bg-liteBlack min-h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingChara || fetchingStaff} size={30}/></div>:
         <motion.div
         initial={{y:-20}}
-        animate={{y:20}}
-        className={tabs === 2 ? 'block' : 'hidden'}>
+        animate={{y:20}}>
             <div className='text-white flex flex-col mx-auto bg-grey px-5 py-4 rounded-lg col-span-3 font-poppins'>
                 <div className='flex flex-row'>
                 <h1 className='text-2xl font-bold'>Characters</h1>
@@ -68,7 +66,7 @@ const CharaStaff = ({animeID, tabs}) => {
                     :<h1>N/A</h1>
                 }
                 {
-                moreChara == false ?
+                moreChara === false ?
                 <MdOutlineExpandMore className='flex mx-auto col-span-2 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreChara(!moreChara)}/>
                 :
                 <MdExpandLess className='flex mx-auto col-span-2 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreChara(!moreChara)}/>
@@ -91,7 +89,7 @@ const CharaStaff = ({animeID, tabs}) => {
                     :<h1>N/A</h1>
                 }
                 {
-                moreStaffs == false ?
+                moreStaffs === false ?
                 <MdOutlineExpandMore className='flex mx-auto col-span-3 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreStaffs(!moreStaffs)}/>
                 :
                 <MdExpandLess className='flex mx-auto col-span-3 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreStaffs(!moreStaffs)}/>

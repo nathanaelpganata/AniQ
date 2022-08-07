@@ -16,60 +16,62 @@ import { motion } from 'framer-motion';
 
 const CharaStaff = React.lazy(() => import('./CharaStaff'))
 const Themes = React.lazy(() => import('./Themes'))
+const Reccomendations = React.lazy(() => import('./Reccomendations'))
+const Statistics = React.lazy(() => import('./Statistics'))
 
 
 export const AnimeInfo = ({goBack, animeID}) => {
 
     const [tabs, setTabs] = useState(1)
-    const [moreChara, setMoreChara] = useState(false)
-    const [moreStaffs, setMoreStaffs] = useState(false)
-    const [moreRecs, setMoreRecs] = useState(false)
-    const [chartData, setChartData] = useState([])
-    const [lang, setLang] = useState("Japanese")
+    // const [moreChara, setMoreChara] = useState(false)
+    // const [moreStaffs, setMoreStaffs] = useState(false)
+    // const [moreRecs, setMoreRecs] = useState(false)
+    // const [chartData, setChartData] = useState([])
+    // const [lang, setLang] = useState("Japanese")
 
     const fetcherAnimeByID = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}`).then(res => res.json())
-    const fetcherCharacterByID = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/characters`).then(res => res.json())
-    const fetcherStaffByID = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/staff`).then(res => res.json())
-    const fetcherRecommendations = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/recommendations`).then(res => res.json())
+    // const fetcherCharacterByID = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/characters`).then(res => res.json())
+    // const fetcherStaffByID = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/staff`).then(res => res.json())
+    // const fetcherRecommendations = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/recommendations`).then(res => res.json())
     const fetcherRelations = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/relations`).then(res => res.json())
-    const fetcherStatistics = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/statistics`).then(res => res.json()).then(res => setChartData(res))
-    const fetcherThemes = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/themes`).then(res => res.json())
+    // const fetcherStatistics = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/statistics`).then(res => res.json()).then(res => setChartData(res))
+    // const fetcherThemes = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/themes`).then(res => res.json())
     
     const {data: anime, isLoading, isFetching} = useQuery("animeByID", fetcherAnimeByID, {
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
     })
 
-    const {data: chara, refetch: refetchChara, isFetching: fetchingChara, error: errorChara} = useQuery("characterByID", fetcherCharacterByID, {
-        enabled: false,
-        cacheTime: Infinity,
-        staleTime: Infinity
-    })
+    // const {data: chara, refetch: refetchChara, isFetching: fetchingChara, error: errorChara} = useQuery("characterByID", fetcherCharacterByID, {
+    //     enabled: false,
+    //     cacheTime: Infinity,
+    //     staleTime: Infinity
+    // })
     
-    const {data: staff, refetch: refetchStaffs, isFetching: fetchingStaff, error: errorStaff} = useQuery("staffByID", fetcherStaffByID, {
-        enabled: false,
-        cacheTime: Infinity,
-        staleTime: Infinity
-    })
+    // const {data: staff, refetch: refetchStaffs, isFetching: fetchingStaff, error: errorStaff} = useQuery("staffByID", fetcherStaffByID, {
+    //     enabled: false,
+    //     cacheTime: Infinity,
+    //     staleTime: Infinity
+    // })
     
-    const {data: recommendations, refetch: refetchRecs, isFetching: fetchingRecs, error: errorRecs} = useQuery("recommendations", fetcherRecommendations, {
-        enabled: false,
-        cacheTime: Infinity,
-        staleTime: Infinity
-    })
+    // const {data: recommendations, refetch: refetchRecs, isFetching: fetchingRecs, error: errorRecs} = useQuery("recommendations", fetcherRecommendations, {
+    //     enabled: false,
+    //     cacheTime: Infinity,
+    //     staleTime: Infinity
+    // })
     
-    const {data: themes, refetch: refetchThemes, isFetching: fetchingThemes, error: errorThemes} = useQuery("themes", fetcherThemes, {
-        enabled: false,
-        cacheTime: Infinity,
-        staleTime: Infinity
-    })
+    // const {data: themes, refetch: refetchThemes, isFetching: fetchingThemes, error: errorThemes} = useQuery("themes", fetcherThemes, {
+    //     enabled: false,
+    //     cacheTime: Infinity,
+    //     staleTime: Infinity
+    // })
 
     const {data: relations} = useQuery("relations", fetcherRelations, {
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
     })
     
-    const {data: statistics} = useQuery("statistics", fetcherStatistics, {
-        refetchOnWindowFocus: false
-    })
+    // const {data: statistics} = useQuery("statistics", fetcherStatistics, {
+    //     refetchOnWindowFocus: false
+    // })
 
     if(isLoading || isFetching) {
         return(
@@ -89,21 +91,21 @@ export const AnimeInfo = ({goBack, animeID}) => {
         },
       };
 
-    let toChara = 8;
-    let toStaffs = 9;
-    let toRecs = 15;
+    // let toChara = 8;
+    // let toStaffs = 9;
+    // let toRecs = 15;
 
-    if (moreChara == true) {
-        toChara = 24
-    }
+    // if (moreChara == true) {
+    //     toChara = 24
+    // }
     
-    if (moreStaffs == true) {
-        toStaffs = 27
-    }
+    // if (moreStaffs == true) {
+    //     toStaffs = 27
+    // }
     
-    if (moreRecs == true) {
-        toRecs = 45
-    }
+    // if (moreRecs == true) {
+    //     toRecs = 45
+    // }
 
     ChartJS.register(
         CategoryScale,
@@ -114,45 +116,45 @@ export const AnimeInfo = ({goBack, animeID}) => {
         Legend
       );
 
-    const scorePercentage = chartData?.data?.scores?.map(score => score.votes)
+    // const scorePercentage = chartData?.data?.scores?.map(score => score.votes)
 
-    const options = {
-        indexAxis: 'y',
-        elements: {
-          bar: {
-            borderWidth: 2,
-          },
-        },
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'right',
-          },
-          title: {
-            display: false,
-            text: 'Score Stats',
-          },
-        },
-      };
+    // const options = {
+    //     indexAxis: 'y',
+    //     elements: {
+    //       bar: {
+    //         borderWidth: 2,
+    //       },
+    //     },
+    //     responsive: true,
+    //     plugins: {
+    //       legend: {
+    //         position: 'right',
+    //       },
+    //       title: {
+    //         display: false,
+    //         text: 'Score Stats',
+    //       },
+    //     },
+    //   };
 
-    const barData = {
-        labels: ["1", "2" ,"3" ,"4" ,"5", "6", "7", "8" ,"9" ,"10"],
-        datasets: [
-          {
-            label: '# of Scores',
-            data: scorePercentage,
-            borderColor: 'rgba(255,130,80,155)',
-            backgroundColor: 'rgba(255,103,64,255)',
-          },
-        ],
-      };
+    // const barData = {
+    //     labels: ["1", "2" ,"3" ,"4" ,"5", "6", "7", "8" ,"9" ,"10"],
+    //     datasets: [
+    //       {
+    //         label: '# of Scores',
+    //         data: scorePercentage,
+    //         borderColor: 'rgba(255,130,80,155)',
+    //         backgroundColor: 'rgba(255,103,64,255)',
+    //       },
+    //     ],
+    //   };
 
 
 
 
   return (
     <div>
-        { anime || chara || staff || recommendations || relations || statistics || themes ? (
+        { anime || relations ? (
             <div>
                 <img src={anime.data.images.jpg.large_image_url} alt={anime.data.title} className="object-cover max-h-[600px] w-full blur-sm items-center absolute -z-30 -mt-3 scale-100 brightness-75 backdrop-contrast-0 border-x-[3px] border-black backdrop-blur-none backdrop-grayscale-0 backdrop-hue-rotate-0 backdrop-opacity-100 backdrop-saturate-100 backdrop-filter" />
                 <div className='mx-52'>
@@ -186,7 +188,7 @@ export const AnimeInfo = ({goBack, animeID}) => {
                 </div>
 
                 {/* Genre, status, etc. */}
-                <div className='font-poppins text-white bg-liteBlack -mt-24 absolute h-min -z-20 w-[100%]'>
+                <div className='font-poppins text-white bg-liteBlack -mt-24 absolute min-h-screen -z-20 w-[100%]'>
                     <div className='mx-52 mt-[77px] select-none'>
                         <div className='flex flex-row gap-2 items-center font-poppins text-sm'>
                             <div className='w-[234px]'></div>
@@ -214,9 +216,9 @@ export const AnimeInfo = ({goBack, animeID}) => {
                             
                             ></motion.div>
                             <h1 className={tabs === 1 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => setTabs(1)}>Info</h1>
-                            <h1 className={tabs === 2 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(2); refetchChara(); refetchStaffs()}}>Characters & Staffs</h1>
-                            <h1 className={tabs === 3 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(3); refetchThemes()}}>Themes</h1>
-                            <h1 className={tabs === 4 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(4); refetchRecs()}}>Reccomendations</h1>
+                            <h1 className={tabs === 2 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(2);}}>Characters & Staffs</h1>
+                            <h1 className={tabs === 3 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(3);}}>Themes</h1>
+                            <h1 className={tabs === 4 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => {setTabs(4);}}>Reccomendations</h1>
                             <h1 className={tabs === 5 ? 'block w-max h-max px-4 py-2 font-bold z-20':'w-max h-max px-4 py-2 font-bold hover:opacity-80 z-20'} onClick={() => setTabs(5)}>Trailer</h1>
                         </motion.div>
 
@@ -275,7 +277,10 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                 :<></>
                                 }
                                 <div className='flex flex-col text-white bg-grey px-5 py-4 rounded-2xl h-min gap-1'>
-                                    <h1 className='text-3xl font-bold'>Statistics</h1> 
+                                    <React.Suspense fallback={<RiseLoader color={"#ff6740"} size={30}/>}>
+                                        {tabs === 1 && <Statistics animeID={animeID} anime={anime}/>}
+                                    </React.Suspense>
+                                    {/* <h1 className='text-3xl font-bold'>Statistics</h1> 
                                     <h1 className='mt-4 flex  font-semibold items-center text-xl'>Watching:&nbsp; {chartData.data?.watching ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.watching}</h1> : <h1>N/A</h1>}</h1>
                                     <h1 className='flex  font-semibold items-center text-xl'>Completed:&nbsp; {chartData.data?.completed ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.completed}</h1> : <h1>N/A</h1>}</h1>
                                     <h1 className='flex  font-semibold items-center text-xl'>On Hold:&nbsp; {chartData.data?.on_hold ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.on_hold}</h1> : <h1>N/A</h1>}</h1>
@@ -283,7 +288,7 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                     <h1 className='flex  font-semibold items-center text-xl'>Plan To Watch:&nbsp; {chartData?.data?.plan_to_watch ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.plan_to_watch}</h1> : <h1>N/A</h1>}</h1>
                                     <h1 className='flex  font-semibold items-center text-xl'>Total:&nbsp; {chartData.data?.total ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.total}</h1> : <h1>N/A</h1>}</h1>
                                     <h1 className='flex justify-center font-semibold items-center text-2xl mt-8 mb-4 flex-wrap'>{anime.data?.title} Score [{anime.data?.score}] of {anime.data?.scored_by} Votes</h1>
-                                    <Bar data={barData} options={options} className="min-w-[600px]" />
+                                    <Bar data={barData} options={options} className="min-w-[600px]" /> */}
                                 </div>
                             </div>
 
@@ -291,8 +296,8 @@ export const AnimeInfo = ({goBack, animeID}) => {
 
                         </motion.div>
 
-                        <React.Suspense>
-                            <CharaStaff animeID={animeID} tabs={tabs}/>
+                        <React.Suspense fallback={<div className='bg-liteBlack min-h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} size={30}/></div>}>
+                            {tabs === 2 && <CharaStaff animeID={animeID} tabs={tabs}/>}
                         </React.Suspense>
                         {/* Characters & Staffs
                         { fetchingChara || fetchingStaff ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingChara || fetchingStaff} size={30}/></div>:
@@ -361,7 +366,10 @@ export const AnimeInfo = ({goBack, animeID}) => {
                         </motion.div>
                         } */}
 
-                        {/* Themes */}
+                        <React.Suspense fallback={<div className='bg-liteBlack min-h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} size={30}/></div>}>
+                            {tabs === 3 && <Themes animeID={animeID} tabs={tabs} />}
+                        </React.Suspense>
+                        {/* Themes
                         { fetchingThemes ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingThemes} size={30}/></div>:
                         <motion.div 
                         initial={{y:-20}}
@@ -389,10 +397,12 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                 </div>
                             </div>
                         </motion.div>
-                        }
+                        } */}
 
-                    
-                        {/* Reccomendations */}
+                        <React.Suspense fallback={<div className='bg-liteBlack min-h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} size={30}/></div>}>
+                            {tabs === 4 && <Reccomendations animeID={animeID} tabs={tabs}/>}
+                        </React.Suspense>
+                        {/* Reccomendations
                         { fetchingRecs ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingRecs} size={30}/></div>:
                         <motion.div 
                         initial={{y:-20}}
@@ -422,7 +432,7 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                 </div>
                             </div>
                         </motion.div>
-                        }
+                        } */}
 
                         {/* Trailer */}
                         <motion.div 
