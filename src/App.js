@@ -1,4 +1,4 @@
-import React, { useState, useRef , useEffect} from 'react'
+import React, { useState } from 'react'
 import './App.css';
 import { useQuery } from 'react-query'
 import { AnimeInfo } from './components/AnimeInfo';

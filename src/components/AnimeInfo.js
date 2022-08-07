@@ -9,9 +9,6 @@ import { SiSpring } from "react-icons/si";
 import { FaSun } from "react-icons/fa";
 import { BsSnow2 } from "react-icons/bs";
 import { GoPrimitiveDot } from "react-icons/go";
-import { MdOutlineExpandMore, MdExpandLess } from "react-icons/md";
-import { Chart as ChartJS, Tooltip, Legend, CategoryScale, LinearScale, BarElement, Title} from 'chart.js';
-import { Bar } from 'react-chartjs-2';
 import { motion } from 'framer-motion';
 
 const CharaStaff = React.lazy(() => import('./CharaStaff'))
@@ -23,55 +20,19 @@ const Statistics = React.lazy(() => import('./Statistics'))
 export const AnimeInfo = ({goBack, animeID}) => {
 
     const [tabs, setTabs] = useState(1)
-    // const [moreChara, setMoreChara] = useState(false)
-    // const [moreStaffs, setMoreStaffs] = useState(false)
-    // const [moreRecs, setMoreRecs] = useState(false)
-    // const [chartData, setChartData] = useState([])
-    // const [lang, setLang] = useState("Japanese")
 
     const fetcherAnimeByID = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}`).then(res => res.json())
-    // const fetcherCharacterByID = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/characters`).then(res => res.json())
-    // const fetcherStaffByID = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/staff`).then(res => res.json())
-    // const fetcherRecommendations = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/recommendations`).then(res => res.json())
     const fetcherRelations = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/relations`).then(res => res.json())
-    // const fetcherStatistics = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/statistics`).then(res => res.json()).then(res => setChartData(res))
-    // const fetcherThemes = () => fetch(`https://api.jikan.moe/v4/anime/${animeID}/themes`).then(res => res.json())
+
     
     const {data: anime, isLoading, isFetching} = useQuery("animeByID", fetcherAnimeByID, {
         refetchOnWindowFocus: false,
     })
 
-    // const {data: chara, refetch: refetchChara, isFetching: fetchingChara, error: errorChara} = useQuery("characterByID", fetcherCharacterByID, {
-    //     enabled: false,
-    //     cacheTime: Infinity,
-    //     staleTime: Infinity
-    // })
-    
-    // const {data: staff, refetch: refetchStaffs, isFetching: fetchingStaff, error: errorStaff} = useQuery("staffByID", fetcherStaffByID, {
-    //     enabled: false,
-    //     cacheTime: Infinity,
-    //     staleTime: Infinity
-    // })
-    
-    // const {data: recommendations, refetch: refetchRecs, isFetching: fetchingRecs, error: errorRecs} = useQuery("recommendations", fetcherRecommendations, {
-    //     enabled: false,
-    //     cacheTime: Infinity,
-    //     staleTime: Infinity
-    // })
-    
-    // const {data: themes, refetch: refetchThemes, isFetching: fetchingThemes, error: errorThemes} = useQuery("themes", fetcherThemes, {
-    //     enabled: false,
-    //     cacheTime: Infinity,
-    //     staleTime: Infinity
-    // })
-
     const {data: relations} = useQuery("relations", fetcherRelations, {
         refetchOnWindowFocus: false,
     })
-    
-    // const {data: statistics} = useQuery("statistics", fetcherStatistics, {
-    //     refetchOnWindowFocus: false
-    // })
+
 
     if(isLoading || isFetching) {
         return(
@@ -90,67 +51,6 @@ export const AnimeInfo = ({goBack, animeID}) => {
           autoplay: 0,
         },
       };
-
-    // let toChara = 8;
-    // let toStaffs = 9;
-    // let toRecs = 15;
-
-    // if (moreChara == true) {
-    //     toChara = 24
-    // }
-    
-    // if (moreStaffs == true) {
-    //     toStaffs = 27
-    // }
-    
-    // if (moreRecs == true) {
-    //     toRecs = 45
-    // }
-
-    ChartJS.register(
-        CategoryScale,
-        LinearScale,
-        BarElement,
-        Title,
-        Tooltip,
-        Legend
-      );
-
-    // const scorePercentage = chartData?.data?.scores?.map(score => score.votes)
-
-    // const options = {
-    //     indexAxis: 'y',
-    //     elements: {
-    //       bar: {
-    //         borderWidth: 2,
-    //       },
-    //     },
-    //     responsive: true,
-    //     plugins: {
-    //       legend: {
-    //         position: 'right',
-    //       },
-    //       title: {
-    //         display: false,
-    //         text: 'Score Stats',
-    //       },
-    //     },
-    //   };
-
-    // const barData = {
-    //     labels: ["1", "2" ,"3" ,"4" ,"5", "6", "7", "8" ,"9" ,"10"],
-    //     datasets: [
-    //       {
-    //         label: '# of Scores',
-    //         data: scorePercentage,
-    //         borderColor: 'rgba(255,130,80,155)',
-    //         backgroundColor: 'rgba(255,103,64,255)',
-    //       },
-    //     ],
-    //   };
-
-
-
 
   return (
     <div>
@@ -277,162 +177,30 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                 :<></>
                                 }
                                 <div className='flex flex-col text-white bg-grey px-5 py-4 rounded-2xl h-min gap-1'>
+                                    {/* Statistics */}
                                     <React.Suspense fallback={<RiseLoader color={"#ff6740"} size={30}/>}>
                                         {tabs === 1 && <Statistics animeID={animeID} anime={anime}/>}
                                     </React.Suspense>
-                                    {/* <h1 className='text-3xl font-bold'>Statistics</h1> 
-                                    <h1 className='mt-4 flex  font-semibold items-center text-xl'>Watching:&nbsp; {chartData.data?.watching ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.watching}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex  font-semibold items-center text-xl'>Completed:&nbsp; {chartData.data?.completed ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.completed}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex  font-semibold items-center text-xl'>On Hold:&nbsp; {chartData.data?.on_hold ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.on_hold}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex  font-semibold items-center text-xl'>Dropped:&nbsp; {chartData.data?.dropped ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.dropped}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex  font-semibold items-center text-xl'>Plan To Watch:&nbsp; {chartData?.data?.plan_to_watch ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.plan_to_watch}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex  font-semibold items-center text-xl'>Total:&nbsp; {chartData.data?.total ? <h1 className='bg-liteGrey px-2 rounded-lg font-normal text-lg'>{chartData.data.total}</h1> : <h1>N/A</h1>}</h1>
-                                    <h1 className='flex justify-center font-semibold items-center text-2xl mt-8 mb-4 flex-wrap'>{anime.data?.title} Score [{anime.data?.score}] of {anime.data?.scored_by} Votes</h1>
-                                    <Bar data={barData} options={options} className="min-w-[600px]" /> */}
                                 </div>
                             </div>
-
-
-
                         </motion.div>
+                        
 
+                        {/* Characters & Staff */}
                         <React.Suspense fallback={<div className='bg-liteBlack min-h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} size={30}/></div>}>
                             {tabs === 2 && <CharaStaff animeID={animeID} tabs={tabs}/>}
                         </React.Suspense>
-                        {/* Characters & Staffs
-                        { fetchingChara || fetchingStaff ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingChara || fetchingStaff} size={30}/></div>:
-                        <motion.div
-                        initial={{y:-20}}
-                        animate={{y:20}}
-                        className={tabs === 2 ? 'block' : 'hidden'}>
-                            <div className='text-white flex flex-col mx-auto bg-grey px-5 py-4 rounded-lg col-span-3 font-poppins'>
-                                <div className='flex flex-row'>
-                                <h1 className='text-2xl font-bold'>Characters</h1>
-                                <div className='flex flex-1'></div>
-                                <h1 className='text-xl font-semibold'>Select Language</h1>
-                                </div>
-                                <div className='grid grid-cols-2 gap-2 mt-8'>
-                                {chara?.data ? chara.data.slice(0, toChara).map((characters) => {
-                                    return <div>
-                                        <div className='flex flex-row bg-liteGrey h-full'>
-                                            <img src={characters.character.images.jpg.image_url} alt="" className="w-1/6 mr-2" />
-                                            <div className='flex flex-1 flex-col'>
-                                            <h1 className='font-semibold text-lg mt-1'>{characters.character.name}</h1>
-                                            <h1 className='mt-1'>{characters.role}</h1>
-                                            </div>
-                                            {characters.voice_actors.filter(languages => languages.language == lang).slice(0,1).map(filteredVa => (<>
-                                                <div className='flex flex-col text-end'>
-                                                <h1 className='font-semibold text-lg mt-1'>{filteredVa.person.name}</h1>
-                                                <h1 className='mt-1'>{filteredVa.language}</h1>
-                                                </div>
-                                                <img src={filteredVa.person.images.jpg.image_url} alt="" className="w-1/6 ml-2" />
-                                                </>))}
-                                        </div>
-                                    </div>})
 
-                                    :<h1>N/A</h1>
-                                }
-                                {
-                                moreChara == false ?
-                                <MdOutlineExpandMore className='flex mx-auto col-span-2 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreChara(!moreChara)}/>
-                                :
-                                <MdExpandLess className='flex mx-auto col-span-2 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreChara(!moreChara)}/>
-                                }
-                                </div>
-                            </div>
-                            <div className='text-white flex flex-col mx-auto bg-grey px-5 py-4 rounded-lg col-span-3 font-poppins mt-6 mb-32'>
-                                <h1 className='text-2xl font-bold w-max'>Staffs</h1>
-                                <div className='grid grid-cols-3 gap-2 mt-8'>
-                                {staff?.data ? staff.data.slice(0, toStaffs).map((staffs) => {
-                                    return <div>
-                                        <div className='flex flex-row bg-liteGrey h-full rounded-lg'>
-                                            <img src={staffs.person.images.jpg.image_url} alt="" className="w-[20%] mr-2" />
-                                            <div className='flex flex-1 flex-col'>
-                                            <h1 className='font-semibold text-lg mt-1'>{staffs.person.name}</h1>
-                                            <h1 className='mt-1'>{staffs.positions.slice(0,4).map(position => <div className='flex flex-col'>{position}</div>)}</h1>
-                                            </div>
-                                        </div>
-                                    </div>})
-                                    :<h1>N/A</h1>
-                                }
-                                {
-                                moreStaffs == false ?
-                                <MdOutlineExpandMore className='flex mx-auto col-span-3 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreStaffs(!moreStaffs)}/>
-                                :
-                                <MdExpandLess className='flex mx-auto col-span-3 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreStaffs(!moreStaffs)}/>
-                                }
-                                </div>
-                            </div>
-                        </motion.div>
-                        } */}
-
+                        {/* Themes */}
                         <React.Suspense fallback={<div className='bg-liteBlack min-h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} size={30}/></div>}>
                             {tabs === 3 && <Themes animeID={animeID} tabs={tabs} />}
                         </React.Suspense>
-                        {/* Themes
-                        { fetchingThemes ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingThemes} size={30}/></div>:
-                        <motion.div 
-                        initial={{y:-20}}
-                        animate={{y:20}}
-                        className={tabs === 3 ? 'block' : 'hidden'}>
-                            <div className='text-white flex flex-col mx-auto bg-grey px-5 py-4 rounded-lg col-span-3 w-full mb-52'>
-                                <h1 className='text-2xl font-bold text-white  w-max'>Themes</h1>
-                                <div className='grid grid-cols-2 bg-opacity-50 h-full rounded-lg p-4 gap-20'>
-                                    <div className='bg-liteGrey px-6 py-3 rounded-lg'>
-                                        <h1 className='text-2xl font-bold mb-4 mt-2'>Openings</h1>
-                                        {themes?.data?.openings?.map(song => {
-                                            return <div>
-                                                <h1 className='text-xl flex flex-wrap'>{song}</h1>
-                                            </div>
-                                        } )}
-                                    </div>
-                                    <div className='bg-liteGrey px-6 py-3 rounded-lg'>
-                                        <h1 className='text-2xl font-bold mb-4 mt-2'>Endings</h1>
-                                        {themes?.data?.endings?.map(song => {
-                                            return <div>
-                                                <h1 className='text-xl flex flex-wrap'>{song}</h1>
-                                            </div>
-                                        } )}
-                                    </div>
-                                </div>
-                            </div>
-                        </motion.div>
-                        } */}
 
+                        {/* Reccomendations */}
                         <React.Suspense fallback={<div className='bg-liteBlack min-h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} size={30}/></div>}>
                             {tabs === 4 && <Reccomendations animeID={animeID} tabs={tabs}/>}
                         </React.Suspense>
-                        {/* Reccomendations
-                        { fetchingRecs ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingRecs} size={30}/></div>:
-                        <motion.div 
-                        initial={{y:-20}}
-                        animate={{y:20}}
-                        className={tabs === 4 ? 'block' : 'hidden'}>
-                            <div className='text-white flex flex-col mx-auto bg-grey px-5 py-4 rounded-lg col-span-3 w-full mb-52'>
-                                <h1 className='text-2xl font-bold text-white  w-max'>Recommendations</h1>
-                                <div className='grid grid-cols-3 gap-2 mt-8'>
-                                {recommendations?.data ? recommendations.data.slice(0, toRecs).map((recs) => {
-                                    return <div>
-                                        <div className='flex flex-row bg-opacity-50 h-full bg-liteGrey rounded-lg'>
-                                            <img src={recs.entry.images.jpg.image_url} alt="" className="w-[30%] mr-2" />
-                                            <div className='flex flex-1 flex-col'>
-                                                <h1 className='font-semibold text-2xl'>{recs.entry.title}</h1>
-                                                <h1 className='text-xl'>Votes: {recs.votes}</h1>
-                                            </div>
-                                        </div>
-                                    </div>})
-                                    :<h1>N/A</h1>
-                                }
-                                {
-                                moreRecs == false ?
-                                <MdOutlineExpandMore className='flex mx-auto col-span-3 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreRecs(!moreRecs)}/>
-                                :
-                                <MdExpandLess className='flex mx-auto col-span-3 bg-liteBlack text-white rounded-3xl scale-[300%] my-6 animate-pulse cursor-pointer hover:text-liteOrange' onClick={() => setMoreRecs(!moreRecs)}/>
-                                }
-                                </div>
-                            </div>
-                        </motion.div>
-                        } */}
+
 
                         {/* Trailer */}
                         <motion.div 
