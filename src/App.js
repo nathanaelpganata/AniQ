@@ -1,7 +1,7 @@
 import React, { useState, useRef , useEffect} from 'react'
 import './App.css';
 import { useQuery } from 'react-query'
-import { AnimeInfo } from './AnimeInfo';
+import { AnimeInfo } from './components/AnimeInfo';
 import { MdOutlineClear } from "react-icons/md";
 import RingLoader from "react-spinners/RingLoader";
 import { motion } from 'framer-motion';

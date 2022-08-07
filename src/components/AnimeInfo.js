@@ -14,10 +14,13 @@ import { Chart as ChartJS, Tooltip, Legend, CategoryScale, LinearScale, BarEleme
 import { Bar } from 'react-chartjs-2';
 import { motion } from 'framer-motion';
 
+const CharaStaff = React.lazy(() => import('./CharaStaff'))
+const Themes = React.lazy(() => import('./Themes'))
+
+
 export const AnimeInfo = ({goBack, animeID}) => {
 
     const [tabs, setTabs] = useState(1)
-    const [selectedTabs, seSelectedTabs] = useState(1)
     const [moreChara, setMoreChara] = useState(false)
     const [moreStaffs, setMoreStaffs] = useState(false)
     const [moreRecs, setMoreRecs] = useState(false)
@@ -288,7 +291,10 @@ export const AnimeInfo = ({goBack, animeID}) => {
 
                         </motion.div>
 
-                        {/* Characters & Staffs */}
+                        <React.Suspense>
+                            <CharaStaff animeID={animeID} tabs={tabs}/>
+                        </React.Suspense>
+                        {/* Characters & Staffs
                         { fetchingChara || fetchingStaff ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingChara || fetchingStaff} size={30}/></div>:
                         <motion.div
                         initial={{y:-20}}
@@ -353,7 +359,7 @@ export const AnimeInfo = ({goBack, animeID}) => {
                                 </div>
                             </div>
                         </motion.div>
-                        }
+                        } */}
 
                         {/* Themes */}
                         { fetchingThemes ? <div className='bg-liteBlack h-screen flex justify-center mt-36'><RiseLoader color={"#ff6740"} loading={fetchingThemes} size={30}/></div>:

@@ -10,6 +10,7 @@ import client from './react-query-client'
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <QueryClientProvider client={client}>
+    <ReactQueryDevtools />
     <App />
   </QueryClientProvider>
 );
